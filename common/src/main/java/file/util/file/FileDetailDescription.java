@@ -93,6 +93,7 @@ public class FileDetailDescription {
 
     public static void contrastFileDesciption(FileDetailDescription source, FileDetailDescription target) {
         List<FileContent> contains = new ArrayList<FileContent>();
+        List<Integer> integers = new ArrayList<Integer>();
         List<List<Integer>> datas = new ArrayList<List<Integer>>();
         Map<FileContent, List<Integer>> detailsDiffer = new LinkedHashMap<FileContent, List<Integer>>();
         List<FileContent> fileContents = source.getFileContents();
@@ -108,12 +109,45 @@ public class FileDetailDescription {
             }
             datas.add(data);
         }
-
-        for(FileContent key : detailsDiffer.keySet()) {
-
-
-
+        List<Integer> key = new ArrayList<Integer>();
+        List<Integer> max = new ArrayList<Integer>();
+        List<Integer> maxx = getMaxString(key, datas, max);
+        for(Integer i : maxx) {
+            System.out.println(i);
         }
+    }
+
+    private static List<Integer> getMaxString(List<Integer> key, List<List<Integer>> contains, List<Integer> max) {
+        List<Integer> vue = new ArrayList<Integer>();
+
+        for(int i = 0 ; i < contains.size(); i++) {
+            if(!key.contains(i)) {
+                key.add(i);
+                vue.add(i);
+                int stand = contains.get(i).get(0);
+                for(int j = i + 1; j < contains.size(); j++) {
+                    for(int d = 0 ; d < contains.get(j).size(); d++) {
+                        if(stand < contains.get(j).get(d)) {
+                            if(d == 0) {
+                                if(!key.contains(j)) {
+                                    key.add(j);
+                                }
+                            }
+                            stand = contains.get(j).get(d);
+                            vue.add(stand);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        if(vue.size() > max.size()) {
+            max = vue;
+        }
+        if(key.size() == contains.size()) {
+            return max;
+        }
+        return getMaxString(key, contains, vue);
 
     }
 }
