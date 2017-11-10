@@ -92,8 +92,6 @@ public class FileDetailDescription {
     }
 
     public static void contrastFileDesciption(FileDetailDescription source, FileDetailDescription target) {
-        List<FileContent> contains = new ArrayList<FileContent>();
-        List<Integer> integers = new ArrayList<Integer>();
         List<List<Integer>> datas = new ArrayList<List<Integer>>();
         Map<FileContent, List<Integer>> detailsDiffer = new LinkedHashMap<FileContent, List<Integer>>();
         List<FileContent> fileContents = source.getFileContents();
@@ -107,11 +105,22 @@ public class FileDetailDescription {
                 }
 
             }
-            datas.add(data);
+            if(data.size() > 0) {
+                datas.add(data);
+            }
         }
         List<Integer> key = new ArrayList<Integer>();
         List<Integer> max = new ArrayList<Integer>();
         List<Integer> maxx = getMaxString(key, datas, max);
+
+        for(FileContent file : target.getFileContents()) {
+            if(maxx.contains(file.getRowNumber())) {
+                System.out.println("对比文件相同：" + file.getContent());
+                System.out.println("对比文件所在的行号为:" + file.getRowNumber());
+            }
+        }
+
+
         for(Integer i : maxx) {
             System.out.println(i);
         }

@@ -1,5 +1,6 @@
 import file.util.FileUtil;
 import file.util.WindowToolUtil;
+import file.util.file.FileDetailDescription;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -46,14 +47,9 @@ public class CommonTest {
 
     @Test
     public void fileTest() {
-        Map<String,List<String>> differentFile = FileUtil.differentFile(new File("D:\\target\\test.txt"), new File("D:\\target\\test1.txt"));
+        FileDetailDescription fileDetailDescription = FileDetailDescription.analysisFile(new File("F:\\test\\test.txt"));
+        FileDetailDescription fileDetailDescription1 = FileDetailDescription.analysisFile(new File("F:\\test\\test1.txt"));
+        FileDetailDescription.contrastFileDesciption(fileDetailDescription, fileDetailDescription1);
 
-        for(String s : differentFile.get("source")) {
-            System.out.println(s);
-        }
-
-        for(String s : differentFile.get("target")) {
-            System.out.println(s);
-        }
     }
 }
