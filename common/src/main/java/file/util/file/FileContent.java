@@ -6,8 +6,19 @@ package file.util.file;
  * @description 文件具体信息处理
  */
 public class FileContent {
-    private String content;
-    private int rowNumber;
+
+  /**
+   * 每一行的内容
+   */
+  private String content;
+
+  /**
+   * 实际行号
+   */
+  private int rowNumber;
+  /**
+   *非空行序号
+   */
     private int orderNumber;
 
     public String getContent() {

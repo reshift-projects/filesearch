@@ -12,9 +12,20 @@ import java.util.*;
  */
 public class FileDetailDescription {
 
+  /**
+   * 每一行文件的细节
+   */
     private List<FileContent> fileContents;
-    private String fileName;
-    private String MD5Signature;
+
+  /**
+   * 文件名称
+   */
+  private String fileName;
+
+  /**
+   * 文件MD5散列值
+   */
+  private String MD5Signature;
 
     public String getFileName() {
         return fileName;
@@ -47,12 +58,17 @@ public class FileDetailDescription {
         fileContents.add(fileContent);
     }
 
-    public static FileDetailDescription analysisFile(File file) {
+  /**
+   * @param file 需要分析的文件
+   * @return 文件描述细节
+   * @throws IOException
+   */
+    public static FileDetailDescription analysisFile(File file) throws IOException {
         FileInputStream fis = null;
         InputStreamReader isr = null;
         FileDetailDescription fileDetailDescription = new FileDetailDescription();
         fileDetailDescription.setFileName(file.getName());
-        fileDetailDescription.setMD5Signature(FileUtil.getFileMD5(file));
+        fileDetailDescription.setMD5Signature(FileUtil.getFileMD5String(file));
         BufferedReader br = null; //用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
         try {
             String str = "";
@@ -91,9 +107,12 @@ public class FileDetailDescription {
         return fileDetailDescription;
     }
 
+  /**
+   * @param source 对比的源文件
+   * @param target 需要对比的目标文件
+   */
     public static void contrastFileDesciption(FileDetailDescription source, FileDetailDescription target) {
         List<List<Integer>> datas = new ArrayList<List<Integer>>();
-        Map<FileContent, List<Integer>> detailsDiffer = new LinkedHashMap<FileContent, List<Integer>>();
         List<FileContent> fileContents = source.getFileContents();
         for(FileContent fileContent : fileContents) {
             List<Integer> data = new ArrayList<Integer>();
@@ -126,6 +145,12 @@ public class FileDetailDescription {
         }
     }
 
+  /**
+   * @param key 已经对比过的字号
+   * @param contains 文件对比参考物
+   * @param max 已获得最大的顺序序列
+   * @return 字符串最大顺序数
+   */
     private static List<Integer> getMaxString(List<Integer> key, List<List<Integer>> contains, List<Integer> max) {
         List<Integer> vue = new ArrayList<Integer>();
 
@@ -157,6 +182,5 @@ public class FileDetailDescription {
             return max;
         }
         return getMaxString(key, contains, vue);
-
     }
 }
