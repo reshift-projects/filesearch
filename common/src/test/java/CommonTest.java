@@ -1,8 +1,9 @@
 import com.alibaba.fastjson.JSON;
 import file.model.file.FileDescription;
+import file.model.file.FileDetailDescription;
 import file.model.file.SystemDescription;
+import file.model.message.RequestMessage;
 import file.util.WindowToolUtil;
-import file.util.file.FileDetailDescription;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static file.util.ConvertFile.getTextFromExcel2007;
@@ -116,8 +118,21 @@ public class CommonTest {
   }
 
   @Test
+  @Ignore
   public void copyFileTest() throws IOException {
     CopyFile(new File("F:\\workspace\\file\\test.txt"), new File("F:\\workspace\\file\\json.branch"), "F:\\workspace\\file", "window");
+  }
+
+  @Test
+  public void requestMessageTest() {
+    RequestMessage requestMessage = new RequestMessage();
+    requestMessage.setCode("00000");
+    requestMessage.setMessage("message");
+    requestMessage.setNode("node");
+    requestMessage.setTime(new Date());
+    requestMessage.setToken("token");
+    String key = "{\"code\":\"00000\",\"message\":\"message\",\"node\":\"node\",\"time\":1510481649144,\"token\":\"token\"}";
+    System.out.println(JSON.toJSONString(requestMessage));
   }
 
 

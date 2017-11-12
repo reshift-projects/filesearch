@@ -159,7 +159,7 @@ public class FileUtil {
         fileMetadata.setParentDir(file.getParent());
         fileMetadatas.add(fileMetadata);
         System.out.println(ElasticServer.saveDataToEs(fileMetadata.getEsInsertData(), "window_search", "system"));
-        System.out.println("rest");
+        System.out.println("tianjian.filesearch.server.service.rest");
         return fileMetadatas;
 
 
@@ -253,11 +253,15 @@ public class FileUtil {
         fileDescriptors.add(fileDetail);
       } else {
         fileDetail.setSignature(contain);
+        File exist = new File(filepath + "\\" + fileDetail.getSignature());
+        exist.delete();
       }
 
       FileUtils.writeByteArrayToFile(vcsFile, JSON.toJSONString(fileDescriptors).getBytes());
 
       Files.copy(checkFile, new File(filepath + "\\" + contain));
+
+
 
     }
 
