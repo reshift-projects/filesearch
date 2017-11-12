@@ -1,4 +1,4 @@
-package file.model;
+package file.model.file;
 
 import java.util.Date;
 import java.util.HashMap;

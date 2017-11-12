@@ -1,25 +1,23 @@
 package file.util;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
 import file.ScanFileUtil;
-import file.model.FileMetadata;
-import file.util.file.FileContent;
-import file.util.file.FileDetailDescription;
+import file.model.file.FileDescription;
+import file.model.file.FileMetadata;
+import file.model.file.SystemDescription;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.math.BigInteger;
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:tianjian@gtmap.cn">tianian</a>
@@ -212,30 +210,55 @@ public class FileUtil {
     }
 
   /**
-   * @param file 需要拷贝的文件
    * @param filepath 文件存放路径相当于svn仓库
    * @throws IOException IOE异常
    */
-    public static void CopyFile(File file, String filepath) throws IOException {
-      Map<String,String> md5key = new HashMap<String,String>();
-      /**
-       * 获取文件的文件名md5加密，目的可控制文件长度，一般情况下会劣化，但是避免很夸张的情况
-       */
-      String key = Hashing.md5().newHasher().putString(file.getAbsolutePath() + file.getName(), Charsets.UTF_8).hash().toString();
-      /**
-       * 对文件进行MD5加密快速比较文件是否变动
-       */
-      String contain = getFileMD5String(file);
+    public static void CopyFile(File checkFile, File vcsFile,  String filepath, String nodename) throws IOException {
 
-      /**
-       * 根据配置文件记录判断文件是否变动，如果变动更新文件，没有变动返回空
-       */
-      if(md5key.containsKey(key) && md5key.containsKey(contain)) {
-        return ;
-      } else {
-        md5key.put(key, contain);
-        Files.copy(file, new File(filepath + "\\" + key));
+      String data = new String(getFileAsBytes(vcsFile));
+
+      List<FileDescription> fileDescriptors = JSON.parseArray(data, FileDescription.class);
+
+      FileDescription fileDetail = null;
+
+      String contain = getFileMD5String(checkFile);
+
+      for(FileDescription fileDescriptor : fileDescriptors) {
+        if(fileDescriptor.getFilename().equals(checkFile.getName())) {
+          List<SystemDescription> systemDescriptions = fileDescriptor.getSystemDescription();
+          for(SystemDescription systemDescription : systemDescriptions) {
+            if(systemDescription.getNode().equals(nodename) && systemDescription.getPath().equals(checkFile.getAbsolutePath())) {
+              fileDetail = fileDescriptor;
+              break;
+            }
+          }
+
+        }
       }
+
+      if(fileDetail != null) {
+        if(fileDetail.getSignature().equals(contain)) {
+          return ;
+        }
+      }
+      if(fileDetail == null) {
+        SystemDescription systemDescription = new SystemDescription();
+        fileDetail = new FileDescription();
+        fileDetail.setFilename(checkFile.getName());
+        fileDetail.setSignature(contain);
+        systemDescription.setNode(nodename);
+        systemDescription.setPath("F:\\workspace\\file\\test.txt");
+        systemDescription.setSystem("window7");
+        fileDetail.addSystemDescription(systemDescription);
+        fileDescriptors.add(fileDetail);
+      } else {
+        fileDetail.setSignature(contain);
+      }
+
+      FileUtils.writeByteArrayToFile(vcsFile, JSON.toJSONString(fileDescriptors).getBytes());
+
+      Files.copy(checkFile, new File(filepath + "\\" + contain));
+
     }
 
   /**

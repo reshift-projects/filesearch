@@ -1,7 +1,7 @@
 package file;
 
 import com.alibaba.fastjson.JSON;
-import file.model.FileMetadata;
+import file.model.file.FileMetadata;
 import file.util.ElasticServer;
 import file.util.FileUtil;
 

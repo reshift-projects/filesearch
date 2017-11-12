@@ -1,6 +1,6 @@
 package tianjian.filesearch.client.service;
 
-import file.model.FileMetadata;
+import file.model.file.FileMetadata;
 import file.util.FileUtil;
 import file.util.ResourceListener;
 import org.springframework.stereotype.Component;
