@@ -29,13 +29,12 @@ public class ConvertFile {
      *
      * @Title: getTextFromWord
      * @Description: 读取word
-     * @param filePath
+     * @param file
      *            文件路径
      * @return: String 读出的Word的内容
      */
-    public static String getTextFromWord(String filePath) {
+    public static String getTextFromWord(File file) {
         String result = null;
-        File file = new File(filePath);
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
@@ -62,15 +61,15 @@ public class ConvertFile {
      *
      * @Title: getTextFromPdf
      * @Description: 读取pdf文件内容
-     * @param filePath
+     * @param file
      * @return: 读出的pdf的内容
      */
-    public static String getTextFromPdf(String filePath) {
+    public static String getTextFromPdf(File file) {
         String result = null;
         FileInputStream is = null;
         PDDocument document = null;
         try {
-            is = new FileInputStream(filePath);
+            is = new FileInputStream(file);
             PDFParser parser = new PDFParser(is);
             parser.parse();
             document = parser.getPDDocument();
@@ -101,16 +100,16 @@ public class ConvertFile {
 
 
     /**
-     * @param filePath
+     * @param file
      *            文件路径
      * @return 读出的Excel的内容
      */
     @SuppressWarnings({"resource", "deprecation"})
-    public static String getTextFromExcel(String filePath) {
+    public static String getTextFromExcel(File file) {
         StringBuffer buff = new StringBuffer();
         try {
             // 创建对Excel工作簿文件的引用
-            HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(filePath));
+            HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(file));
             // 创建对工作表的引用。
             for (int numSheets = 0; numSheets < wb
                     .getNumberOfSheets(); numSheets++) {
@@ -154,12 +153,12 @@ public class ConvertFile {
     }
 
     @SuppressWarnings("deprecation")
-    public static String getTextFromExcel2007(String filePath) {
+    public static String getTextFromExcel2007(File file) {
         StringBuffer buff = new StringBuffer();
         try {
             // 创建对Excel工作簿文件的引用
             @SuppressWarnings("resource")
-            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(filePath));
+            XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(file));
             // 创建对工作表的引用。
             for (int numSheets = 0; numSheets < wb
                     .getNumberOfSheets(); numSheets++) {
