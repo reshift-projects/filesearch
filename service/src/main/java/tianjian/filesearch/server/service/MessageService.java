@@ -6,10 +6,9 @@ import file.model.message.ResponseMessage;
 /**
  * Created by tianjian on 2017/11/12.
  */
-public abstract class MessageService {
+public abstract class MessageService implements DealMessage{
     private String code;
     private MessageService messageService;
-    public abstract ResponseMessage dealMessage(RequestMessage requestMessage);
     public ResponseMessage dealProxyMessage(RequestMessage requestMessage) throws Exception {
         if(requestMessage.getCode().equals(code)) {
             return dealMessage(requestMessage);

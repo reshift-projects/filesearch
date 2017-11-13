@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import tianjian.filesearch.server.service.DealMessage;
 import tianjian.filesearch.server.service.MessageService;
+import tianjian.filesearch.server.service.impl.DealMessageProxy;
 import tianjian.filesearch.server.service.impl.InitFileMessageService;
 
 /**
@@ -15,11 +17,13 @@ import tianjian.filesearch.server.service.impl.InitFileMessageService;
 @Service
 public class MyConfiguration {
     @Bean
-    public MessageService getMessageServcie() {
+    public DealMessage getMessageServcie() {
+        DealMessageProxy ctx = new DealMessageProxy();
         MessageService messageService = new InitFileMessageService("10002");
         MessageService messageService1 = new InitFileMessageService("10003");
-        messageService.buildMessageService(messageService1);
-        return messageService;
+        ctx.addDealMessage(messageService);
+        ctx.addDealMessage(messageService1);
+        return ctx;
     }
 
 
