@@ -67,7 +67,7 @@ public class ImoocRSA {
         getPubKey();
         getPriKey();
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(512);
+        keyPairGenerator.initialize(2048);
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(rsaPrivateKey.getEncoded());
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
